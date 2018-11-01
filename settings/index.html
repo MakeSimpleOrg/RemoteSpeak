@@ -1,0 +1,67 @@
+<!doctype html>
+<html ng-app="deviceApp">
+<head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.css" />
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <script type="text/javascript" src="/manager/webserver/assets/js/angular.js"></script>
+    <script type="text/javascript" src="smart-table.min.js"></script>
+    <script type="text/javascript" src="deviceController.js"></script>
+</head>
+
+<body ng-controller="DeviceSettingsController as vm">
+    <h2>Device management</h2>
+    <div >
+        <div class="panel panel-default">
+            <div class="panel-heading">Add device</div>
+            <div class="panel-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="deviceName">Device name</label>
+                        <input class="form-control" id="deviceName" type="text" ng-model="vm.newDevice.name" placeholder="Name"><span class="error">{{vm.errorMessage}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceToken">Token</label>
+                        <input class="form-control" id="deviceToken" type="text" ng-model="vm.newDevice.token" placeholder="Name"><span class="error">{{vm.errorMessage}}</span>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default" type="button" ng-disabled="!vm.newDevice.name||!vm.newDevice.token" ng-click="vm.addDevice(deviceName, deviceToken)">Add device</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table st-safe-src="vm.devices" st-table="displayedCollection" class="table table-striped">
+            <thead>
+                <tr>
+                    <th st-sort="name">Device name</th>
+                    <th st-sort="token" style="width: 150px;">Token</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="device in displayedCollection" ng-include="vm.getTemplate(device)"></tr>
+            </tbody>
+        </table>
+    </div>
+
+<script type="text/ng-template" id="display">
+        <td>{{device.name}}</td>
+        <td>{{device.token}}</td>
+        <td><button ng-click="vm.removeDevice(device)">Delete</button></td>
+</script>
+<script>
+    function onHomeyReady(Homey) {
+        Homey.ready();
+        var scope = angular.element(document.getElementById('deviceName')).scope();
+        scope.$apply(function() {
+            scope.vm.setHomey(Homey, scope);
+        });
+    };
+</script>
+
+</body>
+</html>
