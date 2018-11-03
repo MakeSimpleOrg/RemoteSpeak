@@ -3,16 +3,14 @@
 const Homey = require('homey');
 const https = require('https');
 
-var devices = null;
-
 var locales = ["bn-BD", "bn-IN", "cs-CZ", "da-DK", "de-DE", "el-GR", "en-AU", "en-GB", "en-IN", "en-US", "es-ES", "es-US", "fi-FI", "fil-PH", "fr-BE", "fr-FR", "hi-IN", "hu-HU", "in-ID", "it-IT", "ja-JP", "km-KH", "ko-KR", "nb-NO", "ne-NP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ru-RU", "si-LK", "sv-SE", "th-TH", "tr-TR", "uk-UA", "vi-VN", "yue-HK"];
 
 function searchForDevicesByValue ( value ) {
-	var possibleDevices = Homey.ManagerSettings.get('devices');
+	var devices = Homey.ManagerSettings.get('devices');
 	var tempItems = [];
 	for (var i = 0; i < devices.length; i++) {
-		var tempName = possibleDevices[i].name;
-		var tempToken = possibleDevices[i].token;
+		var tempName = devices[i].name;
+		var tempToken = devices[i].token;
 		if ( tempName.indexOf(value) >= 0 )
 			tempItems.push({ icon: '', name: tempName, token: tempToken });
 	}
@@ -23,8 +21,6 @@ class RemoteSpeak extends Homey.App {
 
 	onInit() {
 		this.log('RemoteSpeak is running...');
-		
-		devices = Homey.ManagerSettings.get('devices');
 
 		process.on('unhandledRejection', (error) => {
 			this.error('unhandledRejection! ', error);
@@ -49,7 +45,6 @@ class RemoteSpeak extends Homey.App {
 		sendMsg
 			.getArgument('device')
 			.registerAutocompleteListener(( query, args ) => {
-				//var deviceSearchString = value.query;
 				var items = searchForDevicesByValue( query );
             	return Promise.resolve(items);
 			});
