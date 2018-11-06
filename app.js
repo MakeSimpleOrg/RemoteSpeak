@@ -85,9 +85,10 @@ class RemoteSpeak extends Homey.App {
 				if (result.statusCode !== 200)
 					return reject(Error(`error: ${result.statusCode} ${result.body.substr(0, 100)}`));
 				const response = JSON.parse(result.body);
-				if (response.status)
-					return reject(Error(`error: ${response.message}`));
-				return resolve(response[0].status);
+				if (response.failure)
+					return reject(Error(`error: ${JSON.stringify(response.results)}`));
+				//this.log("Response: " + JSON.stringify(response));
+				return resolve(response.success);
 			} catch (error) {
 				return reject(error);
 			}
