@@ -35,7 +35,7 @@ class RemoteSpeak extends Homey.App {
 		sendMsg
 			.register()
 			.registerRunListener(async (args) => {
-				if( typeof args.device == 'undefined' || args.device == null || args.device == '') return callback( new Error("Device cannot be empty!") );
+				if( typeof args.device === 'undefined' || args.device == null || args.device == '') return callback( new Error("Device cannot be empty!") );
 				if( typeof args.lang == 'undefined' || args.lang == null || args.lang == '') return callback( new Error("Lang cannot be empty!") );
 				if( typeof args.msg == 'undefined' || args.msg == null || args.msg == '') return callback( new Error("Message cannot be empty!") );
 				const result = await this.sendMsg(args.device.token, args.lang, args.msg);
@@ -75,8 +75,8 @@ class RemoteSpeak extends Homey.App {
 					'Authorization': 'key=AIzaSyCau_csJXUd5RFFjdKGKH6h9Tvaz4sLj5Y',
 				};
 				const options = {
-					hostname: 'gcm-http.googleapis.com',
-					path: '/gcm/send',
+					hostname: 'fcm.googleapis.com',
+					path: '/fcm/send',
 					headers,
 					method: 'POST',
 				};
